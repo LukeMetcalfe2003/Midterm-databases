@@ -1,0 +1,5 @@
+Why the tables are in 3NF:
+
+The movies table, customers table, and the rentals table are
+all in 3NF because the primary key in each table  is the only thing that 
+the attributes depend on. None of the attributes depend on one another.
