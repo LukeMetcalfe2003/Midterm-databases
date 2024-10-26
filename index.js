@@ -41,7 +41,7 @@ async function createTable() {
     customer_id INTEGER NOT NULL,
     movie_id INTEGER NOT NULL,
     rental_date DATE NOT NULL,
-    return_date DATE NOT NULL,
+    return_date DATE NOT NULL
   )`);
 };
 
@@ -55,6 +55,12 @@ async function createTable() {
  */
 async function insertMovie(title, year, genre, director) {
   // TODO: Add code to insert a new movie into the Movies table
+  await pool.query(`
+    INSERT INTO movies (title, release_year, genre, director)
+    VALUES ($1, $2, $3, $4)
+  `, [title, year, genre, director]);
+
+  console.log('Movie added successfully');
 };
 
 /**
@@ -62,6 +68,12 @@ async function insertMovie(title, year, genre, director) {
  */
 async function displayMovies() {
   // TODO: Add code to retrieve and print all movies from the Movies table
+  const result = await pool.query('SELECT * FROM movies');
+
+  console.log('Movies:');
+  result.rows.forEach(movie => {
+    console.log(`  ${movie.movie_id}. ${movie.title}, a ${movie.genre}, by: ${movie.director}`);
+  });
 };
 
 /**
@@ -72,6 +84,10 @@ async function displayMovies() {
  */
 async function updateCustomerEmail(customerId, newEmail) {
   // TODO: Add code to update a customer's email address
+  const query = 'UPDATE customers SET email = $1 WHERE customer_id = $2';
+  await pool.query(query, [newEmail, customerId]);
+
+  console.log('Customer email updated successfully');
 };
 
 /**
@@ -81,6 +97,10 @@ async function updateCustomerEmail(customerId, newEmail) {
  */
 async function removeCustomer(customerId) {
   // TODO: Add code to remove a customer and their rental history
+  const query = 'DELETE FROM customers WHERE customer_id = $1';
+  await pool.query(query, [customerId]);
+
+  console.log('Customer removed successfully');
 };
 
 /**
